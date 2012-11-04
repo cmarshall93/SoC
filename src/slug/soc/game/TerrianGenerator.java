@@ -152,13 +152,13 @@ public class TerrianGenerator {
 
 		while(finishedBuilding == false){
 			ArrayList<Point> possiblePath = new ArrayList<Point>();
-			if(hMap[cY + 1][cX] <= hMap[cY][cX] && cY + 1 < hMap.length){
+			if(hMap[cY + 1][cX] <= hMap[cY][cX] && cY + 1 < hMap.length - 1){
 				possiblePath.add(new Point(cX , cY + 1));
 			}
 			if(hMap[cY - 1][cX] <= hMap[cY][cX] && cY - 1 > -1){
 				possiblePath.add(new Point(cX, cY - 1));
 			}
-			if(hMap[cY][cX + 1] <= hMap[cY][cX] && cX + 1 < hMap.length){
+			if(hMap[cY][cX + 1] <= hMap[cY][cX] && cX + 1 < hMap.length - 1){
 				possiblePath.add(new Point(cX + 1, cY));
 			}
 			if(hMap[cY][cX - 1] <= hMap[cY][cX] && cX - 1 > -1){
