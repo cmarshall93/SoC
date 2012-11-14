@@ -139,30 +139,42 @@ public class TerrianGenerator {
 				if(intMap[y][x] > temperateTerrain.length){
 					hMap[y][x] = temperateTerrain.length -1;
 				}
+				if(hMap[y][x] == 2 || hMap[y][x] ==  4){
+					hMap[y][x] = 1;
+				}
 			}
 		}
 		ArrayList<Point> river = new ArrayList<Point>();
 
 		river.add(new Point(sX, sY));
 
-		int i = hMap[sY][sX];
 		int cY = sY, cX = sX;
 
 		boolean finishedBuilding = false;
 
+		int c = 0;
+		
 		while(finishedBuilding == false){
 			ArrayList<Point> possiblePath = new ArrayList<Point>();
-			if(hMap[cY + 1][cX] <= hMap[cY][cX] && cY + 1 < hMap.length - 1){
-				possiblePath.add(new Point(cX , cY + 1));
+			if(cY + 1 < hMap.length){
+				if(hMap[cY + 1][cX] <= hMap[cY][cX] && hMap[cY + 1][cX] != 0){
+					possiblePath.add(new Point(cX , cY + 1));
+				}
 			}
-			if(hMap[cY - 1][cX] <= hMap[cY][cX] && cY - 1 > -1){
-				possiblePath.add(new Point(cX, cY - 1));
+			if(cY - 1 > -1){
+				if(hMap[cY - 1][cX] <= hMap[cY][cX] && hMap[cY - 1][cX] != 0){
+					possiblePath.add(new Point(cX, cY - 1));
+				}
 			}
-			if(hMap[cY][cX + 1] <= hMap[cY][cX] && cX + 1 < hMap.length - 1){
-				possiblePath.add(new Point(cX + 1, cY));
+			if(cX + 1 < hMap.length){
+				if(hMap[cY][cX + 1] <= hMap[cY][cX]  && hMap[cY][cX + 1] != 0){
+					possiblePath.add(new Point(cX + 1, cY));
+				}
 			}
-			if(hMap[cY][cX - 1] <= hMap[cY][cX] && cX - 1 > -1){
-				possiblePath.add(new Point(cX - 1, cY));
+			if(cX - 1 < -1){
+				if(hMap[cY][cX - 1] <= hMap[cY][cX]  && hMap[cY][cX - 1] != 0){
+					possiblePath.add(new Point(cX - 1, cY));
+				}
 			}
 
 			if(possiblePath.isEmpty()){
@@ -170,7 +182,7 @@ public class TerrianGenerator {
 			}
 
 			ArrayList<Point> updatedPath = new ArrayList<Point>();
-			
+
 			for(Point p : possiblePath){
 				for(Point rp : river){
 					if(!p.equals(rp)){
@@ -184,15 +196,21 @@ public class TerrianGenerator {
 				finishedBuilding = true;
 			}
 
+			if(c == 10000){
+				finishedBuilding = true;
+			}
+			
 			if(!finishedBuilding){
 				int r = RandomProvider.getInstance().nextInt(possiblePath.size());
 				river.add(possiblePath.get(r));
 				cY = (int) possiblePath.get(r).getY();
 				cX = (int) possiblePath.get(r).getX();
 			}
+			
+			c++;
 
 		}
-		
+
 		rivers = river;
 
 	}
