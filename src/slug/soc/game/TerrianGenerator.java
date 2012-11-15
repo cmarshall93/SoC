@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Random;
 
 import slug.soc.game.gameObjects.*;
@@ -25,7 +26,7 @@ public class TerrianGenerator {
 			new TerrainObjectSnowHill()
 	};
 
-	private ArrayList<Point> rivers = new ArrayList<Point>();
+	private LinkedList<Point> rivers = new LinkedList<Point>();
 
 	public TerrianGenerator(){
 	}
@@ -144,7 +145,7 @@ public class TerrianGenerator {
 				}
 			}
 		}
-		ArrayList<Point> river = new ArrayList<Point>();
+		LinkedList<Point> river = new LinkedList<Point>();
 
 		river.add(new Point(sX, sY));
 
@@ -186,7 +187,7 @@ public class TerrianGenerator {
 			for(Point p : possiblePath){
 				for(Point rp : river){
 					if(!p.equals(rp)){
-						updatedPath.add(p);
+						updatedPath.add(p); //need to make it so that only one point is picked
 					}
 				}
 			}
