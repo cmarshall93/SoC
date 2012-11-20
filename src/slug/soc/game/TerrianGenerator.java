@@ -134,6 +134,7 @@ public class TerrianGenerator {
 		int sY = 39, sX = 60;
 
 		int[][] hMap = new int[intMap.length][intMap.length];
+
 		for(int y = 0; y < intMap.length; y++){
 			for(int x = 0; x < intMap.length; x++){
 				hMap[y][x] = intMap[y][x];
@@ -154,9 +155,14 @@ public class TerrianGenerator {
 		boolean finishedBuilding = false;
 
 		int c = 0;
-		
+
 		while(finishedBuilding == false){
+
+			System.out.println(cX +" : " +  cY);
+
 			ArrayList<Point> possiblePath = new ArrayList<Point>();
+
+			//check for lower spots to move to
 			if(cY + 1 < hMap.length){
 				if(hMap[cY + 1][cX] <= hMap[cY][cX] && hMap[cY + 1][cX] != 0){
 					possiblePath.add(new Point(cX , cY + 1));
@@ -172,27 +178,29 @@ public class TerrianGenerator {
 					possiblePath.add(new Point(cX + 1, cY));
 				}
 			}
-			if(cX - 1 < -1){
+			if(cX - 1 > -1){
 				if(hMap[cY][cX - 1] <= hMap[cY][cX]  && hMap[cY][cX - 1] != 0){
 					possiblePath.add(new Point(cX - 1, cY));
 				}
 			}
 
+			//check there are places to go
 			if(possiblePath.isEmpty()){
 				finishedBuilding = true;
 			}
 
 			ArrayList<Point> updatedPath = new ArrayList<Point>();
 
+			//check possible places aren't already in the river, this is currently broken.
 			for(Point p : possiblePath){
-				for(Point rp : river){
-					if(!p.equals(rp)){
-						updatedPath.add(p); //need to make it so that only one point is picked
-					}
+				if(!river.contains(p)){
+					updatedPath.add(p);
 				}
 			}
+
 			possiblePath = updatedPath;
 
+			//check there are still places to go
 			if(possiblePath.isEmpty()){
 				finishedBuilding = true;
 			}
@@ -200,14 +208,19 @@ public class TerrianGenerator {
 			if(c == 10000){
 				finishedBuilding = true;
 			}
-			
+
+			if(river.size() > 8){
+				finishedBuilding = true;
+			}
+
+			//add one point from possible path
 			if(!finishedBuilding){
 				int r = RandomProvider.getInstance().nextInt(possiblePath.size());
 				river.add(possiblePath.get(r));
 				cY = (int) possiblePath.get(r).getY();
 				cX = (int) possiblePath.get(r).getX();
 			}
-			
+
 			c++;
 
 		}
