@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Random;
 
 import slug.soc.game.gameObjects.*;
@@ -72,11 +73,57 @@ public class TerrianGenerator {
 				}
 			}
 		}
-		for(Point p : rivers){
-			map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverHorizontal();
-		}
+		setupRiver(map);
 		generateBiomes(map);
 		return map;
+	}
+
+
+	private void setupRiver(TerrainObject[][] map){
+
+		for(ListIterator<Point> itr = rivers.listIterator(); itr.hasNext();itr.next()) {
+
+			Point p = (Point) itr.next();
+			itr.previous();//return to p
+			Point next = null;
+			Point prev = null;
+			
+			if(itr.hasPrevious()){
+				prev = itr.previous();//previous river part;
+				itr.next();//return to p
+				System.out.println("prev : "+prev.toString());
+			}
+			
+			itr.next();
+			if(itr.hasNext()){
+				next = itr.next();//next river part
+				itr.previous();
+				System.out.println("next : "+next.toString());
+			}
+			System.out.println();
+			itr.previous();
+
+			if(prev != null && next != null){
+				if(prev.getY() != p.getY() && next.getY() != p.getY()){	//if next and previous are above and below.
+					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverVertical();
+				}
+				if(prev.getY() < p.getY() && next.getY() == p.getY() && next.getX() > p.getX()){//if previous is lower and next is to the left
+					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverTopRightCorner();
+				}
+				if(prev.getY() < p.getY() && next.getY() == p.getY() && next.getX() < p.getX()){//if previous is lower and next is to the right
+					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverTopLeftCorner();
+				}
+				if(prev.getY() > p.getY() && next.getY() == p.getY() && next.getX() > p.getX()){//if previous is higher and next is to the left
+					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverBottomLeftCorner();
+				}
+				if(prev.getY() > p.getY() && next.getY() == p.getY() && next.getX() < p.getX()){//if previous is higher and next is to the right
+					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverBottomRightCorner();
+				}
+				else{
+					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverHorizontal();
+				}
+			}
+		}
 	}
 
 	private int[][] simulateAnt(int[][] intMap, int cx, int cy, int l){
@@ -291,8 +338,6 @@ public class TerrianGenerator {
 		System.out.println(q);
 
 		generateRivers(intMap);
-
-		System.out.println("finish river gen");
 
 		return constructTerrainMap(intMap);
 	}
