@@ -87,13 +87,13 @@ public class TerrianGenerator {
 			itr.previous();//return to p
 			Point next = null;
 			Point prev = null;
-			
+
 			if(itr.hasPrevious()){
 				prev = itr.previous();//previous river part;
 				itr.next();//return to p
 				System.out.println("prev : "+prev.toString());
 			}
-			
+
 			itr.next();
 			if(itr.hasNext()){
 				next = itr.next();//next river part
@@ -107,21 +107,47 @@ public class TerrianGenerator {
 				if(prev.getY() != p.getY() && next.getY() != p.getY()){	//if next and previous are above and below.
 					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverVertical();
 				}
-				if(prev.getY() < p.getY() && next.getY() == p.getY() && next.getX() > p.getX()){//if previous is lower and next is to the left
-					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverTopRightCorner();
+				
+				if(prev.getY() < p.getY() && next.getY() == p.getY() && next.getX() < p.getX()){//if previous is lower and next is to the left
+					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverBottomRightCorner();
 				}
-				if(prev.getY() < p.getY() && next.getY() == p.getY() && next.getX() < p.getX()){//if previous is lower and next is to the right
-					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverTopLeftCorner();
-				}
-				if(prev.getY() > p.getY() && next.getY() == p.getY() && next.getX() > p.getX()){//if previous is higher and next is to the left
+				if(prev.getY() < p.getY() && next.getY() == p.getY() && next.getX() > p.getX()){//if previous is lower and next is to the right
 					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverBottomLeftCorner();
 				}
-				if(prev.getY() > p.getY() && next.getY() == p.getY() && next.getX() < p.getX()){//if previous is higher and next is to the right
+				if(prev.getY() > p.getY() && next.getY() == p.getY() && next.getX() < p.getX()){//if previous is higher and next is to the left
+					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverTopRightCorner();
+				}
+				if(prev.getY() > p.getY() && next.getY() == p.getY() && next.getX() > p.getX()){//if previous is higher and next is to the right
+					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverTopLeftCorner();
+				}
+
+				if(next.getY() < p.getY() && prev.getY() == p.getY() && prev.getX() < p.getX()){//if next is lower and previous is to the left
 					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverBottomRightCorner();
+				}
+				if(next.getY() < p.getY() && prev.getY() == p.getY() && prev.getX() > p.getX()){//if next is lower and previous is to the right
+					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverBottomLeftCorner();
+				}
+				if(next.getY() > p.getY() && prev.getY() == p.getY() && prev.getX() < p.getX()){//if next is higher and previous is to the left
+					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverTopRightCorner();
+				}
+				if(next.getY() > p.getY() && prev.getY() == p.getY() && prev.getX() > p.getX()){//if next is higher and previous is to the right
+					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverTopLeftCorner();
+				}			
+
+				if(prev.getX() != p.getX() && next.getX() != p.getX()){
+					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverHorizontal();
+				}
+			}
+			else if(next == null && prev != null){
+				if(prev.getY() != p.getY()){
+					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverVertical();
 				}
 				else{
 					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverHorizontal();
 				}
+			}
+			else{
+				map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverSource();
 			}
 		}
 	}
@@ -188,7 +214,7 @@ public class TerrianGenerator {
 				if(intMap[y][x] > temperateTerrain.length){
 					hMap[y][x] = temperateTerrain.length -1;
 				}
-				if(hMap[y][x] == 2 || hMap[y][x] ==  4){
+				if(hMap[y][x] == 2 || hMap[y][x] == 4){
 					hMap[y][x] = 1;
 				}
 			}
@@ -202,7 +228,7 @@ public class TerrianGenerator {
 		boolean finishedBuilding = false;
 
 		int c = 0;
-
+		
 		while(finishedBuilding == false){
 
 			System.out.println(cX +" : " +  cY);
@@ -251,15 +277,11 @@ public class TerrianGenerator {
 			if(possiblePath.isEmpty()){
 				finishedBuilding = true;
 			}
-
-			if(c == 10000){
+			
+			if(c > 10000){
 				finishedBuilding = true;
 			}
-
-			if(river.size() > 8){
-				finishedBuilding = true;
-			}
-
+			
 			//add one point from possible path
 			if(!finishedBuilding){
 				int r = RandomProvider.getInstance().nextInt(possiblePath.size());
@@ -267,9 +289,8 @@ public class TerrianGenerator {
 				cY = (int) possiblePath.get(r).getY();
 				cX = (int) possiblePath.get(r).getX();
 			}
-
+			
 			c++;
-
 		}
 
 		rivers = river;
