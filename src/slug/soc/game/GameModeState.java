@@ -148,7 +148,7 @@ public class GameModeState implements IGameState {
 		g.setColor(Color.WHITE);
 		g.drawLine(500, 0, 500, 500);
 
-		if(currentYPos > 0 || currentXPos > 0 || currentYPos < map.length || currentXPos < map.length){
+		if(currentYPos > 0 && currentXPos > 0 && currentYPos < map.length && currentXPos < map.length){
 			g.drawString(getMap()[currentYPos][currentXPos].toString(),750,250);
 		}
 		g.drawString("X: " + currentXPos.toString(), 750, 270);
