@@ -13,6 +13,8 @@ import slug.soc.game.gameObjects.*;
 
 public class TerrianGenerator {
 
+	private static final int MOUNTAIN_CONSTANT = 10;
+	
 	private TerrainObject[] temperateTerrain = {
 			new TerrainObjectWater(),
 			new TerrainObjectGrassPlain(),
@@ -27,7 +29,7 @@ public class TerrianGenerator {
 			new TerrainObjectSnowHill()
 	};
 
-	private LinkedList<Point> rivers = new LinkedList<Point>();
+	private ArrayList<LinkedList<Point>> rivers = new ArrayList<LinkedList<Point>>();
 
 	public TerrianGenerator(){
 	}
@@ -58,7 +60,7 @@ public class TerrianGenerator {
 							map[y][x] = temperateTerrain[intMap[y][x]].getClass().newInstance();
 						}
 						else{
-							if(intMap[y][x] > 10){
+							if(intMap[y][x] > MOUNTAIN_CONSTANT){
 								map[y][x] = new TerrainObjectMountain();
 							}
 							else{
@@ -80,74 +82,74 @@ public class TerrianGenerator {
 
 
 	private void setupRiver(TerrainObject[][] map){
+		for(LinkedList<Point> l : rivers){
 
-		for(ListIterator<Point> itr = rivers.listIterator(); itr.hasNext();itr.next()) {
+			for(ListIterator<Point> itr = l.listIterator(); itr.hasNext();itr.next()) {
 
-			Point p = (Point) itr.next();
-			itr.previous();//return to p
-			Point next = null;
-			Point prev = null;
+				Point p = (Point) itr.next();
+				itr.previous();//return to p
+				Point next = null;
+				Point prev = null;
 
-			if(itr.hasPrevious()){
-				prev = itr.previous();//previous river part;
-				itr.next();//return to p
-				System.out.println("prev : "+prev.toString());
-			}
+				if(itr.hasPrevious()){
+					prev = itr.previous();//previous river part;
+					itr.next();//return to p
+				}
 
-			itr.next();
-			if(itr.hasNext()){
-				next = itr.next();//next river part
+				itr.next();
+				if(itr.hasNext()){
+					next = itr.next();//next river part
+					itr.previous();
+				}
+				System.out.println();
 				itr.previous();
-				System.out.println("next : "+next.toString());
-			}
-			System.out.println();
-			itr.previous();
 
-			if(prev != null && next != null){
-				if(prev.getY() != p.getY() && next.getY() != p.getY()){	//if next and previous are above and below.
-					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverVertical();
-				}
-				
-				if(prev.getY() < p.getY() && next.getY() == p.getY() && next.getX() < p.getX()){//if previous is lower and next is to the left
-					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverBottomRightCorner();
-				}
-				if(prev.getY() < p.getY() && next.getY() == p.getY() && next.getX() > p.getX()){//if previous is lower and next is to the right
-					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverBottomLeftCorner();
-				}
-				if(prev.getY() > p.getY() && next.getY() == p.getY() && next.getX() < p.getX()){//if previous is higher and next is to the left
-					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverTopRightCorner();
-				}
-				if(prev.getY() > p.getY() && next.getY() == p.getY() && next.getX() > p.getX()){//if previous is higher and next is to the right
-					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverTopLeftCorner();
-				}
+				if(prev != null && next != null){
+					if(prev.getY() != p.getY() && next.getY() != p.getY()){	//if next and previous are above and below.
+						map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverVertical();
+					}
 
-				if(next.getY() < p.getY() && prev.getY() == p.getY() && prev.getX() < p.getX()){//if next is lower and previous is to the left
-					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverBottomRightCorner();
-				}
-				if(next.getY() < p.getY() && prev.getY() == p.getY() && prev.getX() > p.getX()){//if next is lower and previous is to the right
-					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverBottomLeftCorner();
-				}
-				if(next.getY() > p.getY() && prev.getY() == p.getY() && prev.getX() < p.getX()){//if next is higher and previous is to the left
-					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverTopRightCorner();
-				}
-				if(next.getY() > p.getY() && prev.getY() == p.getY() && prev.getX() > p.getX()){//if next is higher and previous is to the right
-					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverTopLeftCorner();
-				}			
+					if(prev.getY() < p.getY() && next.getY() == p.getY() && next.getX() < p.getX()){//if previous is lower and next is to the left
+						map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverBottomRightCorner();
+					}
+					if(prev.getY() < p.getY() && next.getY() == p.getY() && next.getX() > p.getX()){//if previous is lower and next is to the right
+						map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverBottomLeftCorner();
+					}
+					if(prev.getY() > p.getY() && next.getY() == p.getY() && next.getX() < p.getX()){//if previous is higher and next is to the left
+						map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverTopRightCorner();
+					}
+					if(prev.getY() > p.getY() && next.getY() == p.getY() && next.getX() > p.getX()){//if previous is higher and next is to the right
+						map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverTopLeftCorner();
+					}
 
-				if(prev.getX() != p.getX() && next.getX() != p.getX()){
-					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverHorizontal();
+					if(next.getY() < p.getY() && prev.getY() == p.getY() && prev.getX() < p.getX()){//if next is lower and previous is to the left
+						map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverBottomRightCorner();
+					}
+					if(next.getY() < p.getY() && prev.getY() == p.getY() && prev.getX() > p.getX()){//if next is lower and previous is to the right
+						map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverBottomLeftCorner();
+					}
+					if(next.getY() > p.getY() && prev.getY() == p.getY() && prev.getX() < p.getX()){//if next is higher and previous is to the left
+						map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverTopRightCorner();
+					}
+					if(next.getY() > p.getY() && prev.getY() == p.getY() && prev.getX() > p.getX()){//if next is higher and previous is to the right
+						map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverTopLeftCorner();
+					}			
+
+					if(prev.getX() != p.getX() && next.getX() != p.getX()){
+						map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverHorizontal();
+					}
 				}
-			}
-			else if(next == null && prev != null){
-				if(prev.getY() != p.getY()){
-					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverVertical();
+				else if(next == null && prev != null){
+					if(prev.getY() != p.getY()){
+						map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverVertical();
+					}
+					else{
+						map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverHorizontal();
+					}
 				}
 				else{
-					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverHorizontal();
+					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverSource();
 				}
-			}
-			else{
-				map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverSource();
 			}
 		}
 	}
@@ -203,9 +205,8 @@ public class TerrianGenerator {
 		}
 	}
 
-	private void generateRivers(int[][] intMap){
-		int sY = 39, sX = 60;
 
+	private void generateRivers(int[][] intMap){
 		int[][] hMap = new int[intMap.length][intMap.length];
 
 		for(int y = 0; y < intMap.length; y++){
@@ -219,6 +220,31 @@ public class TerrianGenerator {
 				}
 			}
 		}
+		
+		ArrayList<Point> possiblePoints = new ArrayList<Point>();
+		//check for mountains to spawn rivers on.
+		for(int y = 0; y < intMap.length; y++){
+			for(int x = 0; x < intMap.length; x++){
+				if(intMap[y][x] >= MOUNTAIN_CONSTANT){
+					possiblePoints.add(new Point(x,y));
+				}
+			}
+		}
+		System.out.println(possiblePoints.size());
+		//spawn the rivers at one of the points randomly
+		for(int i = 0;i < 10; i++){
+			int r = RandomProvider.getInstance().nextInt(possiblePoints.size());
+			generateRiver(hMap,(int)possiblePoints.get(r).getX(),(int)possiblePoints.get(r).getY());
+		}
+		
+	}
+
+	private void generateRiver(int[][] hMap,int x,int y){
+		
+		//starting point of the river
+		int sY = y;
+		int sX = x;
+
 		LinkedList<Point> river = new LinkedList<Point>();
 
 		river.add(new Point(sX, sY));
@@ -228,10 +254,8 @@ public class TerrianGenerator {
 		boolean finishedBuilding = false;
 
 		int c = 0;
-		
-		while(finishedBuilding == false){
 
-			System.out.println(cX +" : " +  cY);
+		while(finishedBuilding == false){
 
 			ArrayList<Point> possiblePath = new ArrayList<Point>();
 
@@ -277,11 +301,11 @@ public class TerrianGenerator {
 			if(possiblePath.isEmpty()){
 				finishedBuilding = true;
 			}
-			
+
 			if(c > 10000){
 				finishedBuilding = true;
 			}
-			
+
 			//add one point from possible path
 			if(!finishedBuilding){
 				int r = RandomProvider.getInstance().nextInt(possiblePath.size());
@@ -289,11 +313,11 @@ public class TerrianGenerator {
 				cY = (int) possiblePath.get(r).getY();
 				cX = (int) possiblePath.get(r).getX();
 			}
-			
+
 			c++;
 		}
 
-		rivers = river;
+		rivers.add(river);
 
 	}
 

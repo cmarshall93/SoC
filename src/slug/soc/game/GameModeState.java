@@ -18,6 +18,8 @@ import slug.soc.game.gameObjects.TerrainObject;
  */
 public class GameModeState implements IGameState {
 
+	private static final int UPDATE_RATE = 30;
+	
 	private TerrainObject[][] map;
 	private TerrianGenerator terrianGenerator;
 	private GameObjectCursor cursor = new GameObjectCursor();
@@ -124,15 +126,15 @@ public class GameModeState implements IGameState {
 		int gy = 30;
 		int gx;
 		g.setFont(new Font("Monospaced", Font.PLAIN, (int)(19 * zoomScales[currentZoomIndex])));
-		for(int y = currentYPos - 12, my = 0; my < (25 * 1/zoomScales[currentZoomIndex]); y++,my++){
+		for(int y = currentYPos - 12 * (int) (1/zoomScales[currentZoomIndex]), my = 0; my < (25 * 1/zoomScales[currentZoomIndex]); y++,my++){
 			gx = 15;
-			for(int x = currentXPos - 12, mx = 0; mx < (25 * 1/zoomScales[currentZoomIndex]) ; x++, mx++){
+			for(int x = currentXPos - 12 * (int) (1/zoomScales[currentZoomIndex]), mx = 0; mx < (25 * 1/zoomScales[currentZoomIndex]) ; x++, mx++){
 				if(x < 0 || y < 0 || x >= getMap().length || y >= getMap().length ){
 					g.setColor(Color.BLACK);
 					g.drawString(" ", gx, gy);
 				}
 				else{
-					if(frameCounter >= 60){
+					if(frameCounter >= UPDATE_RATE){
 						getMap()[y][x].nextTile();
 					}
 					g.setColor(getMap()[y][x].getTile().getColor());
@@ -142,7 +144,7 @@ public class GameModeState implements IGameState {
 			}
 			gy += g.getFont().getSize();
 		}
-		if(frameCounter >= 60){
+		if(frameCounter >= UPDATE_RATE ){
 			frameCounter = 0;
 		}
 		g.setColor(Color.WHITE);
