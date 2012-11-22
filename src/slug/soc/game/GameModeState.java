@@ -60,7 +60,7 @@ public class GameModeState implements IGameState {
 			}
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_DOWN){
-			if(currentYPos < getMap().length){
+			if(currentYPos < getMap().length - 1){
 				if(cursorActive){
 					map[currentYPos][currentXPos].removeGameObject(cursor);
 					currentYPos++;
@@ -72,7 +72,7 @@ public class GameModeState implements IGameState {
 			}
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-			if(currentXPos < getMap().length){
+			if(currentXPos < getMap().length -1){ 
 				if(cursorActive){
 					map[currentYPos][currentXPos].removeGameObject(cursor);
 					currentXPos++;
