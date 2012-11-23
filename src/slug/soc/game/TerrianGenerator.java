@@ -288,7 +288,7 @@ public class TerrianGenerator {
 
 			ArrayList<Point> updatedPath = new ArrayList<Point>();
 
-			//check possible places aren't already in the river, this is currently broken.
+			//check possible places aren't already in the river
 			for(Point p : possiblePath){
 				if(!river.contains(p)){
 					updatedPath.add(p);

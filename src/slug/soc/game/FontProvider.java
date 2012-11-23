@@ -14,15 +14,15 @@ public class FontProvider {
 	private Font gameFont;
 
 	private FontProvider(){
-		FileInputStream fontFile;
+		/*FileInputStream fontFile;
 		try {
 			fontFile = new FileInputStream("Ubuntu-M.ttf");
 			gameFont = Font.createFont(Font.TRUETYPE_FONT, fontFile);
 			gameFont.deriveFont(19);
 		} catch (Exception e) {
-			System.out.println("failed to load font");
+			System.out.println("failed to load font");*/
 			gameFont = new Font("Monospaced", Font.PLAIN,19);
-		}
+		//}
 
 
 	}

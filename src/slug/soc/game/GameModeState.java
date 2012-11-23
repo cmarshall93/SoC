@@ -125,7 +125,9 @@ public class GameModeState implements IGameState {
 		Graphics g = gameImage.getGraphics();
 		int gy = 30;
 		int gx;
-		g.setFont(new Font("Monospaced", Font.PLAIN, (int)(19 * zoomScales[currentZoomIndex])));
+		g.setFont(FontProvider.getInstance().getFont());
+		g.setFont(FontProvider.getInstance().getFont().deriveFont((float)Math.floor(19 * zoomScales[currentZoomIndex])));
+		//(new Font("Monospaced", Font.PLAIN, (int)(19 * zoomScales[currentZoomIndex])));
 		for(int y = currentYPos - 12 * (int) (1/zoomScales[currentZoomIndex]), my = 0; my < (25 * 1/zoomScales[currentZoomIndex]); y++,my++){
 			gx = 15;
 			for(int x = currentXPos - 12 * (int) (1/zoomScales[currentZoomIndex]), mx = 0; mx < (25 * 1/zoomScales[currentZoomIndex]) ; x++, mx++){
