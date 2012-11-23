@@ -215,7 +215,7 @@ public class TerrianGenerator {
 				if(intMap[y][x] > temperateTerrain.length){
 					hMap[y][x] = temperateTerrain.length -1;
 				}
-				if(hMap[y][x] == 2 || hMap[y][x] == 4){
+				if(hMap[y][x] == 4 || hMap[y][x] == 2){
 					hMap[y][x] = 1;
 				}
 			}

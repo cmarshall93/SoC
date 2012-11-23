@@ -8,7 +8,7 @@ import slug.soc.view.GameView;
 public class SongsOfConquestProgram {
 
 	public static void main(String[] args) {
-		
+	
 		GameView view = new GameView();
 		GameEngine eng = new GameEngine(view);
 		
