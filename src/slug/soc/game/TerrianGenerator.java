@@ -21,12 +21,14 @@ public class TerrianGenerator {
 			new TerrainObjectGrassPlain(),
 			new TerrainObjectForest(),
 			new TerrainObjectGrassPlain(),
-			new TerrainObjectGrassHill()
+			new TerrainObjectGrassHill(),
+			new TerrainObjectRockyHill()
 	};
 	private TerrainObject[] articTerrain = {
 			new TerrainObjectWater(),
 			new TerrainObjectSnowPlain(),
-			new TerrainObjectSnowHill()
+			new TerrainObjectSnowHill(),
+			new TerrainObjectRockyHill()
 	};
 
 	private ArrayList<LinkedList<Point>> rivers = new ArrayList<LinkedList<Point>>();
@@ -101,7 +103,6 @@ public class TerrianGenerator {
 					next = itr.next();//next river part
 					itr.previous();
 				}
-				System.out.println();
 				itr.previous();
 
 				if(prev != null && next != null){
@@ -232,9 +233,10 @@ public class TerrianGenerator {
 		}
 		System.out.println(possiblePoints.size());
 		//spawn the rivers at one of the points randomly
-		for(int i = 0;i < 10; i++){
+		for(int i = 0;i < 10 && !possiblePoints.isEmpty(); i++){
 			int r = RandomProvider.getInstance().nextInt(possiblePoints.size());
 			generateRiver(hMap,(int)possiblePoints.get(r).getX(),(int)possiblePoints.get(r).getY());
+			possiblePoints.remove(r);
 		}
 		
 	}
