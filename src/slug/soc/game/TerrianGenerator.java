@@ -14,7 +14,7 @@ import slug.soc.game.gameObjects.*;
 public class TerrianGenerator {
 
 	private static final int MOUNTAIN_CONSTANT = 10;
-	
+
 	private TerrainObject[] temperateTerrain = {
 			new TerrainObjectWater(),
 			new TerrainObjectGrassPlain(),
@@ -212,15 +212,15 @@ public class TerrianGenerator {
 		for(int y = 0; y < intMap.length; y++){
 			for(int x = 0; x < intMap.length; x++){
 				hMap[y][x] = intMap[y][x];
-				if(intMap[y][x] > temperateTerrain.length){
-					hMap[y][x] = temperateTerrain.length -1;
-				}
 				if(hMap[y][x] == 4 || hMap[y][x] == 2){
 					hMap[y][x] = 1;
 				}
+				if(intMap[y][x] > temperateTerrain.length){
+					hMap[y][x] = temperateTerrain.length -1;
+				}
 			}
 		}
-		
+
 		ArrayList<Point> possiblePoints = new ArrayList<Point>();
 		//check for mountains to spawn rivers on.
 		for(int y = 0; y < intMap.length; y++){
@@ -236,11 +236,11 @@ public class TerrianGenerator {
 			int r = RandomProvider.getInstance().nextInt(possiblePoints.size());
 			generateRiver(hMap,(int)possiblePoints.get(r).getX(),(int)possiblePoints.get(r).getY());
 		}
-		
+
 	}
 
 	private void generateRiver(int[][] hMap,int x,int y){
-		
+
 		//starting point of the river
 		int sY = y;
 		int sX = x;
@@ -363,28 +363,18 @@ public class TerrianGenerator {
 			intMap = simulateAnt(intMap, cx, cy, 2001);
 		}
 
-		smoothTerrain(intMap);
-
-		int avg = 0;
-		int q = 0;
-		int c = 0;
-		for(int y = 0; y < intMap.length; y++){
-			for(int x = 0;x < intMap.length; x++){				//calcualte average tile value.
-				if(intMap[y][x] > 0){
-					avg += intMap[y][x];
-					c++;
-					if(intMap[y][x] > q){
-						q = intMap[y][x];
-					}
+		for(int y1 = 0; y1 < intMap.length; y1++){
+			for(int x1 = 0; x1 < intMap.length; x1++){
+				if(intMap[y1][x1] > temperateTerrain.length){
+					intMap[y1][x1] = intMap[y1][x1] - (1 + RandomProvider.getInstance().nextInt(3));
 				}
 			}
 		}
-		System.out.println(avg/c);
-		System.out.println(q);
+		smoothTerrain(intMap);
+
 
 		generateRivers(intMap);
 
 		return constructTerrainMap(intMap);
 	}
-
 }
