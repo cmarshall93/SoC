@@ -1,12 +1,10 @@
 package slug.soc.game;
 
-import java.awt.Color;
+
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
-import java.util.Random;
 
 import slug.soc.game.gameObjects.*;
 
@@ -22,13 +20,11 @@ public class TerrianGenerator {
 			new TerrainObjectForest(),
 			new TerrainObjectGrassPlain(),
 			new TerrainObjectGrassHill(),
-			new TerrainObjectRockyHill()
 	};
 	private TerrainObject[] articTerrain = {
 			new TerrainObjectWater(),
 			new TerrainObjectSnowPlain(),
 			new TerrainObjectSnowHill(),
-			new TerrainObjectRockyHill()
 	};
 
 	private ArrayList<LinkedList<Point>> rivers = new ArrayList<LinkedList<Point>>();
@@ -58,16 +54,14 @@ public class TerrianGenerator {
 				}
 				else{
 					try {
-						if(intMap[y][x] < temperateTerrain.length){
+						if(intMap[y][x] > MOUNTAIN_CONSTANT){
+							map[y][x] = new TerrainObjectMountain();
+						}
+						else if(intMap[y][x] < temperateTerrain.length){
 							map[y][x] = temperateTerrain[intMap[y][x]].getClass().newInstance();
 						}
 						else{
-							if(intMap[y][x] > MOUNTAIN_CONSTANT){
-								map[y][x] = new TerrainObjectMountain();
-							}
-							else{
-								map[y][x] = temperateTerrain[temperateTerrain.length - (1 + RandomProvider.getInstance().nextInt(3))].getClass().newInstance();
-							}
+							map[y][x] = new TerrainObjectGrassPlain();
 						}
 					} catch (InstantiationException e) {
 						e.printStackTrace();
@@ -213,12 +207,6 @@ public class TerrianGenerator {
 		for(int y = 0; y < intMap.length; y++){
 			for(int x = 0; x < intMap.length; x++){
 				hMap[y][x] = intMap[y][x];
-				if(hMap[y][x] == 4 || hMap[y][x] == 2){
-					hMap[y][x] = 1;
-				}
-				if(intMap[y][x] > temperateTerrain.length){
-					hMap[y][x] = temperateTerrain.length -1;
-				}
 			}
 		}
 
@@ -367,13 +355,15 @@ public class TerrianGenerator {
 
 		for(int y1 = 0; y1 < intMap.length; y1++){
 			for(int x1 = 0; x1 < intMap.length; x1++){
-				if(intMap[y1][x1] > temperateTerrain.length){
-					intMap[y1][x1] = intMap[y1][x1] - (1 + RandomProvider.getInstance().nextInt(3));
+				if(intMap[y1][x1] > temperateTerrain.length && intMap[y1][x1] < MOUNTAIN_CONSTANT){
+					intMap[y1][x1] = temperateTerrain.length - (1 + RandomProvider.getInstance().nextInt(temperateTerrain.length));
+				}
+				if(intMap[y1][x1] == 4 || intMap[y1][x1] == 2){
+					intMap[y1][x1] = 1;
 				}
 			}
 		}
 		smoothTerrain(intMap);
-
 
 		generateRivers(intMap);
 

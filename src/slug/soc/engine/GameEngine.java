@@ -19,7 +19,6 @@ import slug.soc.view.GameView;
 public class GameEngine {
 
 	private GameView gameview;
-	private Game game;
 	private Timer renderTimer;
 	private boolean running;
 
@@ -28,7 +27,7 @@ public class GameEngine {
 		gameview.addKeyListener(new KeyListener(){
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				game.getCurrentGameState().processKey(arg0);
+				Game.getInstance().getCurrentGameState().processKey(arg0);
 			}
 			@Override
 			public void keyReleased(KeyEvent arg0) {
@@ -36,7 +35,6 @@ public class GameEngine {
 			@Override
 			public void keyTyped(KeyEvent arg0) {
 			}});
-		game = new Game();
 	}
 	/**
 	 * Adds the renderTask to the renderTimer, which draws the game every 15ms.
@@ -53,7 +51,7 @@ public class GameEngine {
 	 * Calls the drawGameImage method in the gameView, passing the image generated from the renderGameImage method in the renderEngine.
 	 */
 	private void renderGame(){
-		gameview.drawGameImage(game.getCurrentGameState().createImage());
+		gameview.drawGameImage(Game.getInstance().getCurrentGameState().createImage());
 	}
 	
 	private class RenderTask extends TimerTask{
