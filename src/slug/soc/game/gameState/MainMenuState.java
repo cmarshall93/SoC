@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import slug.soc.game.FontProvider;
 import slug.soc.game.menu.AbstractMenuOption;
 import slug.soc.game.menu.ExitProgramOption;
-import slug.soc.game.menu.HelpOption;
+import slug.soc.game.menu.AboutOption;
 import slug.soc.game.menu.RunGameOption;
 
 public class MainMenuState implements IGameState {
@@ -29,7 +29,7 @@ public class MainMenuState implements IGameState {
 	private MainMenuState(){
 		options = new AbstractMenuOption[3];
 		options[0] = new RunGameOption();
-		options[1] = new HelpOption();
+		options[1] = new AboutOption();
 		options[2] = new ExitProgramOption();
 		currentOption = 0;
 	}

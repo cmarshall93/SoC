@@ -3,7 +3,7 @@ package slug.soc.game.menu;
 public class ExitProgramOption extends AbstractMenuOption {
 
 	public ExitProgramOption(){
-		super("Exit");
+		super("Exit(Close program)");
 	}
 
 	@Override
