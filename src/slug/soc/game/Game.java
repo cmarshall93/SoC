@@ -1,5 +1,8 @@
 package slug.soc.game;
 
+import slug.soc.game.gameState.IGameState;
+import slug.soc.game.gameState.MainMenuState;
+
 public class Game {
 	
 	private static Game instance;
