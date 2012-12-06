@@ -8,12 +8,23 @@ import java.awt.image.BufferedImage;
 
 public class MainMenuState implements IGameState {
 
-	private MainMenuOption[] options;
+	private static MainMenuState instance;
+	
+	private AbstractMenuOption[] options;
 	private int currentOption;
 	
-	public MainMenuState(){
-		options = new MainMenuOption[1];
+	public static MainMenuState getInstance(){
+		if(instance == null){
+			instance = new MainMenuState();
+		}
+		return instance;
+	}
+	
+	private MainMenuState(){
+		options = new AbstractMenuOption[3];
 		options[0] = new RunGameOption();
+		options[1] = new HelpOption();
+		options[2] = new ExitProgramOption();
 		currentOption = 0;
 	}
 	

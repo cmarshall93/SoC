@@ -14,7 +14,7 @@ public class Game {
 	}
 	
 	private Game(){
-		currentGame = new MainMenuState();
+		currentGame = MainMenuState.getInstance();
 	}
 	
 	public void setCurrentGameState(IGameState gameState){

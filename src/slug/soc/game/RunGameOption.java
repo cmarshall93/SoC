@@ -1,6 +1,6 @@
 package slug.soc.game;
 
-public class RunGameOption extends MainMenuOption {
+public class RunGameOption extends AbstractMenuOption {
 
 	public RunGameOption(){
 		super("Start Game");
@@ -8,7 +8,7 @@ public class RunGameOption extends MainMenuOption {
 	
 	@Override
 	public void act() {
-		Game.getInstance().setCurrentGameState(new GameModeState());
+		Game.getInstance().setCurrentGameState(GameModeState.getInstance());
 	}
 
 }

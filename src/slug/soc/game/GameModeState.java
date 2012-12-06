@@ -19,6 +19,7 @@ import slug.soc.game.gameObjects.TerrainObject;
 public class GameModeState implements IGameState {
 
 	private static final int UPDATE_RATE = 30;
+	private static GameModeState instance;
 	
 	private TerrainObject[][] map;
 	private TerrianGenerator terrianGenerator;
@@ -34,7 +35,14 @@ public class GameModeState implements IGameState {
 	private int currentZoomIndex = 0;
 	private int frameCounter;
 
-	public GameModeState(){
+	public static GameModeState getInstance(){
+		if(instance == null){
+			instance = new GameModeState();
+		}
+		return instance;
+	}
+	
+	private GameModeState(){
 		long start = System.nanoTime();
 		terrianGenerator = new TerrianGenerator();
 		map = terrianGenerator.testGenerateMapMultiCont(100, 100);
