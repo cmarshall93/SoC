@@ -135,12 +135,6 @@ public class TerrianGenerator {
 					}
 				}
 				else if(next == null && prev != null){
-					if(prev.getY() != p.getY()){
-						map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverVertical();
-					}
-					else{
-						map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverHorizontal();
-					}
 				}
 				else{
 					map[(int) p.getY()][(int) p.getX()] = new TerrainObjectRiverSource();
@@ -251,22 +245,22 @@ public class TerrianGenerator {
 
 			//check for lower spots to move to
 			if(cY + 1 < hMap.length){
-				if(hMap[cY + 1][cX] <= hMap[cY][cX] && hMap[cY + 1][cX] != 0){
+				if(hMap[cY + 1][cX] <= hMap[cY][cX]){
 					possiblePath.add(new Point(cX , cY + 1));
 				}
 			}
 			if(cY - 1 > -1){
-				if(hMap[cY - 1][cX] <= hMap[cY][cX] && hMap[cY - 1][cX] != 0){
+				if(hMap[cY - 1][cX] <= hMap[cY][cX]){
 					possiblePath.add(new Point(cX, cY - 1));
 				}
 			}
 			if(cX + 1 < hMap.length){
-				if(hMap[cY][cX + 1] <= hMap[cY][cX]  && hMap[cY][cX + 1] != 0){
+				if(hMap[cY][cX + 1] <= hMap[cY][cX]){
 					possiblePath.add(new Point(cX + 1, cY));
 				}
 			}
 			if(cX - 1 > -1){
-				if(hMap[cY][cX - 1] <= hMap[cY][cX]  && hMap[cY][cX - 1] != 0){
+				if(hMap[cY][cX - 1] <= hMap[cY][cX]){
 					possiblePath.add(new Point(cX - 1, cY));
 				}
 			}
@@ -292,6 +286,13 @@ public class TerrianGenerator {
 				finishedBuilding = true;
 			}
 
+			for(Point p : possiblePath){
+				if(hMap[(int)p.getY()][(int)p.getX()] == 0){
+					river.add(p);
+					finishedBuilding = true;
+				}
+			}
+			
 			if(c > 10000){
 				finishedBuilding = true;
 			}
