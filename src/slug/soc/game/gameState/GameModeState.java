@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 
 import slug.soc.game.FontProvider;
 import slug.soc.game.Game;
+import slug.soc.game.HouseSigilGenerator;
 import slug.soc.game.TerrianGenerator;
 import slug.soc.game.gameObjects.GameObjectArmy;
 import slug.soc.game.gameObjects.GameObjectCursor;
@@ -49,6 +50,9 @@ public class GameModeState implements IGameState {
 		long start = System.nanoTime();
 		terrianGenerator = new TerrianGenerator();
 		map = terrianGenerator.testGenerateMapMultiCont(100, 100);
+		
+		System.out.println(HouseSigilGenerator.getInstance().createNewSigilString());
+		
 		currentXPos = 50;
 		currentYPos = 50;
 		long end = System.nanoTime();

@@ -40,11 +40,11 @@ public class WordGenerator {
 		return n;
 	}
 	
-	public String getRandomAdjective(){
+	private String getRandomWordFromFile(File file){
 		String word = null;
-		int n = countLines(adjectivesFile);
+		int n = countLines(file);
 		try {
-			scanner = new Scanner(adjectivesFile);
+			scanner = new Scanner(file);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -55,5 +55,13 @@ public class WordGenerator {
 		}
 		scanner.close();
 		return word;
+	}
+	
+	public String getRandomAdjective(){
+		return getRandomWordFromFile(adjectivesFile);
+	}
+	
+	public String getRandomNoun(){
+		return getRandomWordFromFile(nounsFile);
 	}
 }
