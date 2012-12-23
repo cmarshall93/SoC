@@ -20,11 +20,11 @@ import slug.soc.game.gameObjects.TerrainObject;
  * @author slug
  *
  */
-public class GameModeState implements IGameState {
+public class GameModeState implements IGameState, Runnable {
 
 	private static final int UPDATE_RATE = 30;
 	private static GameModeState instance;
-	
+
 	private TerrainObject[][] map;
 	private TerrianGenerator terrianGenerator;
 	private GameObjectCursor cursor = new GameObjectCursor();
@@ -35,6 +35,7 @@ public class GameModeState implements IGameState {
 	};
 
 	private boolean cursorActive = false;
+	private boolean loadedWorld = false;
 
 	private int currentZoomIndex = 0;
 	private int frameCounter;
@@ -45,18 +46,24 @@ public class GameModeState implements IGameState {
 		}
 		return instance;
 	}
-	
+
 	private GameModeState(){
-		long start = System.nanoTime();
 		terrianGenerator = new TerrianGenerator();
-		map = terrianGenerator.testGenerateMapMultiCont(100, 100);
-		
+	}
+
+	public void run(){
+		generateWorld();
+	}
+	
+	public void generateWorld(){
+		long start = System.nanoTime();
 		System.out.println(HouseSigilGenerator.getInstance().createNewSigilString());
-		
+		map = terrianGenerator.testGenerateMapMultiCont(100, 100);
 		currentXPos = 50;
 		currentYPos = 50;
 		long end = System.nanoTime();
 		System.out.println("GenTime: " + (end - start)/1000000);
+		loadedWorld = true;
 	}
 
 	public TerrainObject[][] getMap(){
@@ -141,40 +148,47 @@ public class GameModeState implements IGameState {
 		frameCounter++;
 		Image gameImage = new BufferedImage(1000,500, BufferedImage.TYPE_INT_RGB);
 		Graphics g = gameImage.getGraphics();
-		int gy = 30;
-		int gx;
-		g.setFont(FontProvider.getInstance().getFont());
-		g.setFont(FontProvider.getInstance().getFont().deriveFont((float)Math.floor(19 * zoomScales[currentZoomIndex])));
-		//(new Font("Monospaced", Font.PLAIN, (int)(19 * zoomScales[currentZoomIndex])));
-		for(int y = currentYPos - 12 * (int) (1/zoomScales[currentZoomIndex]), my = 0; my < (25 * 1/zoomScales[currentZoomIndex]); y++,my++){
-			gx = 15;
-			for(int x = currentXPos - 12 * (int) (1/zoomScales[currentZoomIndex]), mx = 0; mx < (25 * 1/zoomScales[currentZoomIndex]) ; x++, mx++){
-				if(x < 0 || y < 0 || x >= getMap().length || y >= getMap().length ){
-					g.setColor(Color.BLACK);
-					g.drawString(" ", gx, gy);
-				}
-				else{
-					if(frameCounter >= UPDATE_RATE){
-						getMap()[y][x].nextTile();
+		if(loadedWorld){
+			int gy = 30;
+			int gx;
+			g.setFont(FontProvider.getInstance().getFont());
+			g.setFont(FontProvider.getInstance().getFont().deriveFont((float)Math.floor(19 * zoomScales[currentZoomIndex])));
+			for(int y = currentYPos - 12 * (int) (1/zoomScales[currentZoomIndex]), my = 0; my < (25 * 1/zoomScales[currentZoomIndex]); y++,my++){
+				gx = 15;
+				for(int x = currentXPos - 12 * (int) (1/zoomScales[currentZoomIndex]), mx = 0; mx < (25 * 1/zoomScales[currentZoomIndex]) ; x++, mx++){
+					if(x < 0 || y < 0 || x >= getMap().length || y >= getMap().length ){
+						g.setColor(Color.BLACK);
+						g.drawString(" ", gx, gy);
 					}
-					g.setColor(getMap()[y][x].getTile().getColor());
-					g.drawString(getMap()[y][x].getTile().getSymbol().toString(), gx, gy);
+					else{
+						if(frameCounter >= UPDATE_RATE){
+							getMap()[y][x].nextTile();
+						}
+						g.setColor(getMap()[y][x].getTile().getColor());
+						g.drawString(getMap()[y][x].getTile().getSymbol().toString(), gx, gy);
+					}
+					gx += g.getFont().getSize();
 				}
-				gx += g.getFont().getSize();
+				gy += g.getFont().getSize();
 			}
-			gy += g.getFont().getSize();
-		}
-		if(frameCounter >= UPDATE_RATE ){
-			frameCounter = 0;
-		}
-		g.setColor(Color.WHITE);
-		g.drawLine(500, 0, 500, 500);
+			if(frameCounter >= UPDATE_RATE ){
+				frameCounter = 0;
+			}
+			g.setColor(Color.WHITE);
+			g.drawLine(500, 0, 500, 500);
 
-		if(currentYPos > 0 && currentXPos > 0 && currentYPos < map.length && currentXPos < map.length){
-			g.drawString(getMap()[currentYPos][currentXPos].toString(),750,250);
+			if(currentYPos > 0 && currentXPos > 0 && currentYPos < map.length && currentXPos < map.length){
+				g.drawString(getMap()[currentYPos][currentXPos].toString(),750,250);
+			}
+			g.drawString("X: " + currentXPos.toString(), 750, 270);
+			g.drawString("Y: " + currentYPos.toString(), 790, 270);
 		}
-		g.drawString("X: " + currentXPos.toString(), 750, 270);
-		g.drawString("Y: " + currentYPos.toString(), 790, 270);
+		else{
+			int gy = 30;
+			int gx = 30;
+			g.setFont(FontProvider.getInstance().getFont());
+			g.drawString("Loading", gx, gy);
+		}
 
 		return gameImage;
 	}	
