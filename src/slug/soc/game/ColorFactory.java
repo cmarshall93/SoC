@@ -34,4 +34,9 @@ public class ColorFactory {
 		factionColorsIndex += 1;
 		return factionColors[factionColorsIndex - 1];
 	}
+	
+	public FactionColor getRandomFactionColor(){
+		int i = RandomProvider.getInstance().nextInt(factionColors.length);
+		return factionColors[i];
+	}
 }

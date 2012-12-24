@@ -171,9 +171,7 @@ public class GameModeState implements IGameState, Runnable {
 				}
 				gy += g.getFont().getSize();
 			}
-			if(frameCounter >= UPDATE_RATE ){
-				frameCounter = 0;
-			}
+			
 			g.setColor(Color.WHITE);
 			g.drawLine(500, 0, 500, 500);
 
@@ -187,9 +185,35 @@ public class GameModeState implements IGameState, Runnable {
 			int gy = 30;
 			int gx = 30;
 			g.setFont(FontProvider.getInstance().getFont());
-			g.drawString("Loading", gx, gy);
+			g.drawString("Generating world", gx, gy);
+			gy += 20;
+			for(String s: getGenStatus()){
+				g.drawString(s, gx, gy);
+				gy += 20;
+			}
+			gy = 480;
+			gx = 500;
+			if(frameCounter >= UPDATE_RATE){
+				g.drawString("\\", gx, gy);
+			}
+			else{
+				g.drawString("/", gx, gy);
+			}
+		}
+		
+		if(frameCounter >= UPDATE_RATE ){
+			frameCounter = 0;
 		}
 
 		return gameImage;
 	}	
+	
+	private String[] getGenStatus(){
+		String[] status = new String[4];
+		status[0] = "Terrain Generation......" + terrianGenerator.getGenStatus().toString() + "%";
+		status[1] = "test";
+		status[2] = "test";
+		status[3] = "test";
+		return status;
+	}
 }

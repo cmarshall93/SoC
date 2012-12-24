@@ -10,7 +10,7 @@ public class WordGenerator {
 	private static WordGenerator instance = null;
 
 	private File nounsFile = new File("nouns.txt");
-	private File adjectivesFile = new File("verbs.txt");
+	private File verbsFile = new File("verbs.txt");
 	
 	private Scanner scanner;
 	
@@ -58,7 +58,7 @@ public class WordGenerator {
 	}
 	
 	public String getRandomAdjective(){
-		return getRandomWordFromFile(adjectivesFile);
+		return getRandomWordFromFile(verbsFile);
 	}
 	
 	public String getRandomNoun(){

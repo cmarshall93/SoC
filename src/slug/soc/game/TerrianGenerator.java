@@ -27,11 +27,17 @@ public class TerrianGenerator {
 			new TerrainObjectSnowHill(),
 	};
 
+	private int genStatus;
+	
 	private ArrayList<LinkedList<Point>> rivers = new ArrayList<LinkedList<Point>>();
 
 	public TerrianGenerator(){
 	}
 
+	public Integer getGenStatus(){
+		return genStatus;
+	}
+	
 	private TerrainObject[][] constructTerrainMap(int[][] intMap){
 
 		TerrainObject[][] map = new TerrainObject[intMap.length][intMap.length];
@@ -71,8 +77,11 @@ public class TerrianGenerator {
 				}
 			}
 		}
+		genStatus = 80;
 		setupRiver(map);
+		genStatus = 90;
 		generateBiomes(map);
+		genStatus = 100;
 		return map;
 	}
 
@@ -348,10 +357,13 @@ public class TerrianGenerator {
 
 	public TerrainObject[][] testGenerateMapMultiCont(int w, int h){
 
+		genStatus = 0;
+		
 		int[][] intMap = generateIntMap(w, h);
 
 		for(int n = 0, cy = RandomProvider.getInstance().nextInt(intMap.length), cx = RandomProvider.getInstance().nextInt(intMap.length); n < 4; n++){
 			intMap = simulateAnt(intMap, cx, cy, 2001);
+			genStatus += 10;
 		}
 
 		for(int y1 = 0; y1 < intMap.length; y1++){
@@ -365,8 +377,12 @@ public class TerrianGenerator {
 			}
 		}
 		smoothTerrain(intMap);
+		
+		genStatus = 50;
 
 		generateRivers(intMap);
+		
+		genStatus = 70;
 
 		return constructTerrainMap(intMap);
 	}

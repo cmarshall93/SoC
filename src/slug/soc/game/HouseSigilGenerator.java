@@ -17,6 +17,7 @@ public class HouseSigilGenerator {
 	
 	public String createNewSigilString(){
 		String sigil = "A ";
+		sigil += ColorFactory.getInstance().getRandomFactionColor() + " ";
 		sigil += WordGenerator.getInstance().getRandomAdjective().toLowerCase() + " ";
 		sigil += WordGenerator.getInstance().getRandomNoun().toLowerCase() + " ";
 		sigil += "on a ";
