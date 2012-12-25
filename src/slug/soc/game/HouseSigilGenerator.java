@@ -14,14 +14,14 @@ public class HouseSigilGenerator {
 		}
 		return instance;
 	}
-	
-	public String createNewSigilString(){
+
+	public String createNewSigilString(FactionColor factionColor){
 		String sigil = "A ";
-		sigil += ColorFactory.getInstance().getRandomFactionColor() + " ";
 		sigil += WordGenerator.getInstance().getRandomAdjective().toLowerCase() + " ";
+		sigil += ColorFactory.getInstance().getRandomFactionColor() + " ";
 		sigil += WordGenerator.getInstance().getRandomNoun().toLowerCase() + " ";
 		sigil += "on a ";
-		sigil += ColorFactory.getInstance().getNextFactionColor().toString()+ " ";
+		sigil += factionColor.toString()+ " ";
 		sigil += "background";
 		return sigil;
 	}

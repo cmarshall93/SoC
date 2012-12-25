@@ -7,7 +7,7 @@ import slug.soc.game.gameObjects.tiles.GameTile;
 public class TileForest extends GameTile{
 
 	public TileForest() {
-		super('r', Color.GREEN);
+		super('r', new Color(0, 80, 0));
 	}
 
 }

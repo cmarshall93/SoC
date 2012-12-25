@@ -11,6 +11,8 @@ import slug.soc.game.FontProvider;
 import slug.soc.game.Game;
 import slug.soc.game.HouseSigilGenerator;
 import slug.soc.game.TerrianGenerator;
+import slug.soc.game.gameObjects.Faction;
+import slug.soc.game.gameObjects.GameObject;
 import slug.soc.game.gameObjects.GameObjectArmy;
 import slug.soc.game.gameObjects.GameObjectCursor;
 import slug.soc.game.gameObjects.TerrainObject;
@@ -36,6 +38,9 @@ public class GameModeState implements IGameState, Runnable {
 
 	private boolean cursorActive = false;
 	private boolean loadedWorld = false;
+	
+	private String[] loadingString = {".", "..", "..."};
+	private int currentLoadingString = 0;
 
 	private int currentZoomIndex = 0;
 	private int frameCounter;
@@ -57,10 +62,22 @@ public class GameModeState implements IGameState, Runnable {
 	
 	public void generateWorld(){
 		long start = System.nanoTime();
-		System.out.println(HouseSigilGenerator.getInstance().createNewSigilString());
+				
 		map = terrianGenerator.testGenerateMapMultiCont(100, 100);
 		currentXPos = 50;
 		currentYPos = 50;
+		
+		//**************faction testing*******************
+		Faction faction = new Faction();
+		System.out.println(faction.getSigil());
+		int x = 50;
+		int y = 50;
+		for(GameObject g : faction.getHoldings()){
+			map[y][x].addGameObject(g);
+			y++;
+		}
+		//************************************************
+		
 		long end = System.nanoTime();
 		System.out.println("GenTime: " + (end - start)/1000000);
 		loadedWorld = true;
@@ -175,6 +192,7 @@ public class GameModeState implements IGameState, Runnable {
 			g.setColor(Color.WHITE);
 			g.drawLine(500, 0, 500, 500);
 
+			g.setFont(FontProvider.getInstance().getFont().deriveFont(10f));
 			if(currentYPos > 0 && currentXPos > 0 && currentYPos < map.length && currentXPos < map.length){
 				g.drawString(getMap()[currentYPos][currentXPos].toString(),750,250);
 			}
@@ -194,11 +212,14 @@ public class GameModeState implements IGameState, Runnable {
 			gy = 480;
 			gx = 500;
 			if(frameCounter >= UPDATE_RATE){
-				g.drawString("\\", gx, gy);
+				if(currentLoadingString + 1 < loadingString.length){
+					currentLoadingString++  ;
+				}
+				else{
+					currentLoadingString = 0;
+				}
 			}
-			else{
-				g.drawString("/", gx, gy);
-			}
+			g.drawString(loadingString[currentLoadingString], gx, gy);
 		}
 		
 		if(frameCounter >= UPDATE_RATE ){

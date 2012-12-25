@@ -14,7 +14,8 @@ public class ColorFactory {
 			new FactionColor(Color.YELLOW,"yellow"),
 			new FactionColor(Color.GRAY,"grey"),
 			new FactionColor(Color.MAGENTA,"magenta"),
-			new FactionColor(new Color(124,252,0), "brown")
+			new FactionColor(new Color(252,252,252), "white"),
+			new FactionColor(new Color(150,75,0), "brown")
 	};
 
 	protected ColorFactory(){

@@ -48,7 +48,8 @@ public class WordGenerator {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		for(int i = 0; i < RandomProvider.getInstance().nextInt(n) + 1; i++){
+		int q = RandomProvider.getInstance().nextInt(n) + 1;
+		for(int i = 0; i < q ; i++){
 			if(scanner.hasNext()){
 				word = scanner.nextLine();
 			}

@@ -16,9 +16,6 @@ public class TerrianGenerator {
 	private TerrainObject[] temperateTerrain = {
 			new TerrainObjectWater(),
 			new TerrainObjectGrassPlain(),
-			new TerrainObjectGrassPlain(),
-			new TerrainObjectForest(),
-			new TerrainObjectGrassPlain(),
 			new TerrainObjectGrassHill(),
 	};
 	private TerrainObject[] articTerrain = {
@@ -368,11 +365,11 @@ public class TerrianGenerator {
 
 		for(int y1 = 0; y1 < intMap.length; y1++){
 			for(int x1 = 0; x1 < intMap.length; x1++){
-				if(intMap[y1][x1] > temperateTerrain.length && intMap[y1][x1] < MOUNTAIN_CONSTANT){
-					intMap[y1][x1] = temperateTerrain.length - (1 + RandomProvider.getInstance().nextInt(temperateTerrain.length));
-				}
-				if(intMap[y1][x1] == 4 || intMap[y1][x1] == 2){
+				if(intMap[y1][x1] > 0 && intMap[y1][x1] < 7){
 					intMap[y1][x1] = 1;
+				}
+				else if(intMap[y1][x1] >= 7 && intMap[y1][x1] < MOUNTAIN_CONSTANT){
+					intMap[y1][x1] = 2;
 				}
 			}
 		}
