@@ -38,7 +38,7 @@ public class GameModeState implements IGameState, Runnable {
 
 	private boolean cursorActive = false;
 	private boolean loadedWorld = false;
-	
+
 	private String[] loadingString = {".", "..", "..."};
 	private int currentLoadingString = 0;
 
@@ -59,14 +59,14 @@ public class GameModeState implements IGameState, Runnable {
 	public void run(){
 		generateWorld();
 	}
-	
+
 	public void generateWorld(){
 		long start = System.nanoTime();
-				
+
 		map = terrianGenerator.testGenerateMapMultiCont(100, 100);
 		currentXPos = 50;
 		currentYPos = 50;
-		
+
 		//**************faction testing*******************
 		Faction faction = new Faction();
 		System.out.println(faction.getSigil());
@@ -74,10 +74,16 @@ public class GameModeState implements IGameState, Runnable {
 		int y = 50;
 		for(GameObject g : faction.getHoldings()){
 			map[y][x].addGameObject(g);
+			for(int yd = -1; yd < 2; yd++){
+				for(int xd = -1; xd < 2; xd++){
+					map[y + yd][x + xd].setOwner(faction);
+					System.out.println(map[y + yd][x + xd].toString());
+				}
+			}
 			y++;
 		}
 		//************************************************
-		
+
 		long end = System.nanoTime();
 		System.out.println("GenTime: " + (end - start)/1000000);
 		loadedWorld = true;
@@ -166,69 +172,93 @@ public class GameModeState implements IGameState, Runnable {
 		Image gameImage = new BufferedImage(1000,500, BufferedImage.TYPE_INT_RGB);
 		Graphics g = gameImage.getGraphics();
 		if(loadedWorld){
-			int gy = 30;
-			int gx;
-			g.setFont(FontProvider.getInstance().getFont());
-			g.setFont(FontProvider.getInstance().getFont().deriveFont((float)Math.floor(19 * zoomScales[currentZoomIndex])));
-			for(int y = currentYPos - 12 * (int) (1/zoomScales[currentZoomIndex]), my = 0; my < (25 * 1/zoomScales[currentZoomIndex]); y++,my++){
-				gx = 15;
-				for(int x = currentXPos - 12 * (int) (1/zoomScales[currentZoomIndex]), mx = 0; mx < (25 * 1/zoomScales[currentZoomIndex]) ; x++, mx++){
-					if(x < 0 || y < 0 || x >= getMap().length || y >= getMap().length ){
-						g.setColor(Color.BLACK);
-						g.drawString(" ", gx, gy);
-					}
-					else{
-						if(frameCounter >= UPDATE_RATE){
-							getMap()[y][x].nextTile();
-						}
-						g.setColor(getMap()[y][x].getTile().getColor());
-						g.drawString(getMap()[y][x].getTile().getSymbol().toString(), gx, gy);
-					}
-					gx += g.getFont().getSize();
-				}
-				gy += g.getFont().getSize();
-			}
-			
+			drawMap(g);
 			g.setColor(Color.WHITE);
 			g.drawLine(500, 0, 500, 500);
-
-			g.setFont(FontProvider.getInstance().getFont().deriveFont(10f));
-			if(currentYPos > 0 && currentXPos > 0 && currentYPos < map.length && currentXPos < map.length){
-				g.drawString(getMap()[currentYPos][currentXPos].toString(),750,250);
-			}
-			g.drawString("X: " + currentXPos.toString(), 750, 270);
-			g.drawString("Y: " + currentYPos.toString(), 790, 270);
+			drawInfo(g);
 		}
 		else{
-			int gy = 30;
-			int gx = 30;
-			g.setFont(FontProvider.getInstance().getFont());
-			g.drawString("Generating world", gx, gy);
-			gy += 20;
-			for(String s: getGenStatus()){
-				g.drawString(s, gx, gy);
-				gy += 20;
-			}
-			gy = 480;
-			gx = 500;
-			if(frameCounter >= UPDATE_RATE){
-				if(currentLoadingString + 1 < loadingString.length){
-					currentLoadingString++  ;
-				}
-				else{
-					currentLoadingString = 0;
-				}
-			}
-			g.drawString(loadingString[currentLoadingString], gx, gy);
+			drawLoading(g);
 		}
-		
+
 		if(frameCounter >= UPDATE_RATE ){
 			frameCounter = 0;
 		}
 
 		return gameImage;
 	}	
-	
+
+	private void drawMap(Graphics g){
+		int gy = 30;
+		int gx;
+		g.setFont(FontProvider.getInstance().getFont());
+		g.setFont(FontProvider.getInstance().getFont().deriveFont((float)Math.floor(19 * zoomScales[currentZoomIndex])));
+		for(int y = currentYPos - 12 * (int) (1/zoomScales[currentZoomIndex]), my = 0; my < (25 * 1/zoomScales[currentZoomIndex]); y++,my++){
+			gx = 15;
+			for(int x = currentXPos - 12 * (int) (1/zoomScales[currentZoomIndex]), mx = 0; mx < (25 * 1/zoomScales[currentZoomIndex]) ; x++, mx++){
+				if(x < 0 || y < 0 || x >= getMap().length || y >= getMap().length ){
+					g.setColor(Color.BLACK);
+					g.drawString(" ", gx, gy);
+				}
+				else{
+					if(frameCounter >= UPDATE_RATE){
+						getMap()[y][x].nextTile();
+					}
+					g.setColor(getMap()[y][x].getTile().getColor());
+					g.drawString(getMap()[y][x].getTile().getSymbol().toString(), gx, gy);
+				}
+				gx += g.getFont().getSize();
+			}
+			gy += g.getFont().getSize();
+		}
+	}
+
+	private void drawInfo(Graphics g){
+
+		int gx = 510;
+		int gy = 30;
+
+		g.setFont(FontProvider.getInstance().getFont().deriveFont(10f));
+		if(currentYPos > 0 && currentXPos > 0 && currentYPos < map.length && currentXPos < map.length){
+			g.drawString(getMap()[currentYPos][currentXPos].toString(),gx, gy);
+		}
+		gy += 11;
+		g.drawString("X: " + currentXPos.toString(), gx, gy);
+		gx += 50;
+		g.drawString("Y: " + currentYPos.toString(), gx, gy);
+		gx -= 50;
+		gy += 20;
+		if(getMap()[currentYPos][currentXPos].getOwner() != null){
+			g.drawString("Property of " + getMap()[currentYPos][currentXPos].getOwner().toString(), gx, gy);
+		}
+		else{
+			g.drawString("Unclaimed land", gx, gy);
+		}
+	}
+
+	private void drawLoading(Graphics g){
+		int gy = 30;
+		int gx = 30;
+		g.setFont(FontProvider.getInstance().getFont());
+		g.drawString("Generating world", gx, gy);
+		gy += 20;
+		for(String s: getGenStatus()){
+			g.drawString(s, gx, gy);
+			gy += 20;
+		}
+		gy = 480;
+		gx = 500;
+		if(frameCounter >= UPDATE_RATE){
+			if(currentLoadingString + 1 < loadingString.length){
+				currentLoadingString++  ;
+			}
+			else{
+				currentLoadingString = 0;
+			}
+		}
+		g.drawString(loadingString[currentLoadingString], gx, gy);
+	}
+
 	private String[] getGenStatus(){
 		String[] status = new String[4];
 		status[0] = "Terrain Generation......" + terrianGenerator.getGenStatus().toString() + "%";

@@ -12,6 +12,7 @@ import slug.soc.game.gameObjects.*;
 public class TerrianGenerator {
 
 	private static final int MOUNTAIN_CONSTANT = 10;
+	private static final int NUMBER_OF_FORESTS = 30;
 
 	private TerrainObject[] temperateTerrain = {
 			new TerrainObjectWater(),
@@ -25,8 +26,10 @@ public class TerrianGenerator {
 	};
 
 	private int genStatus;
-	
+
 	private ArrayList<LinkedList<Point>> rivers = new ArrayList<LinkedList<Point>>();
+
+	private int[][] forestMap;
 
 	public TerrianGenerator(){
 	}
@@ -34,7 +37,7 @@ public class TerrianGenerator {
 	public Integer getGenStatus(){
 		return genStatus;
 	}
-	
+
 	private TerrainObject[][] constructTerrainMap(int[][] intMap){
 
 		TerrainObject[][] map = new TerrainObject[intMap.length][intMap.length];
@@ -71,6 +74,13 @@ public class TerrianGenerator {
 					} catch (IllegalAccessException e) {
 						e.printStackTrace();
 					}
+				}
+			}
+		}
+		for(int y = 0;y < forestMap.length; y++){
+			for(int x = 0; x < forestMap.length; x++){
+				if(forestMap[y][x] == 1){
+					map[y][x] = new TerrainObjectForest();
 				}
 			}
 		}
@@ -298,7 +308,7 @@ public class TerrianGenerator {
 					finishedBuilding = true;
 				}
 			}
-			
+
 			if(c > 10000){
 				finishedBuilding = true;
 			}
@@ -355,7 +365,7 @@ public class TerrianGenerator {
 	public TerrainObject[][] testGenerateMapMultiCont(int w, int h){
 
 		genStatus = 0;
-		
+
 		int[][] intMap = generateIntMap(w, h);
 
 		for(int n = 0, cy = RandomProvider.getInstance().nextInt(intMap.length), cx = RandomProvider.getInstance().nextInt(intMap.length); n < 4; n++){
@@ -374,13 +384,41 @@ public class TerrianGenerator {
 			}
 		}
 		smoothTerrain(intMap);
-		
+
 		genStatus = 50;
 
+		generateForests(intMap);
+
 		generateRivers(intMap);
-		
+
 		genStatus = 70;
 
 		return constructTerrainMap(intMap);
+	}
+
+	private void generateForests(int[][] map){
+		forestMap = new int[map.length][map.length];
+		for(int i = 0;  i < NUMBER_OF_FORESTS;i++){
+			boolean goodCoord = false;
+			int xCoord = 0;
+			int yCoord = 0;
+			while(!goodCoord){
+				xCoord = RandomProvider.getInstance().nextInt(forestMap.length);
+				yCoord = RandomProvider.getInstance().nextInt(forestMap.length);
+				if(map[yCoord][xCoord] != 0 && map[yCoord][xCoord] < 3){
+					goodCoord = true;
+				}
+			}
+			for(int n = 0;n < 11;n++){
+				if(map[yCoord][xCoord] == 1 || map[yCoord][xCoord] == 2){
+					forestMap[yCoord][xCoord] = 1;
+				}
+				if(yCoord - 1 > 0 && xCoord - 1 > 0 && yCoord + 1 < forestMap.length -1 && xCoord + 1 < forestMap.length -1){
+					yCoord += RandomProvider.getInstance().nextInt(3) - 1;
+					xCoord += RandomProvider.getInstance().nextInt(3) - 1;
+				}
+			}
+		}
+
 	}
 }

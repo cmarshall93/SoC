@@ -12,13 +12,19 @@ import slug.soc.game.gameObjects.tiles.GameTile;
 public abstract class GameObject implements GameDrawable {
 
 	private GameTile tile;
+	private Faction owner;
 	
-	public GameObject(GameTile tile){
+	public GameObject(GameTile tile, Faction owner){
 		this.tile = tile;	
+		this.owner = owner;
 	}
 	
 	public GameTile getTile(){
 		return tile;
+	}
+	
+	public Faction getOwner(){
+		return owner;
 	}
 }
 

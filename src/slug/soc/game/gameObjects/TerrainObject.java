@@ -18,6 +18,7 @@ public abstract class TerrainObject implements GameDrawable{
 	private ArrayList<GameObject> gameObjects;
 	private boolean isBiome;
 	private String biomeString;
+	private Faction owner;
 
 	public TerrainObject(GameTile tile){
 		baseTile = tile;	
@@ -25,6 +26,7 @@ public abstract class TerrainObject implements GameDrawable{
 		tileIndex = 0;
 		isBiome = false;
 		gameObjects = new ArrayList<GameObject>();
+		owner = null;
 	}
 
 	public GameTile getTile(){
@@ -32,11 +34,22 @@ public abstract class TerrainObject implements GameDrawable{
 	}
 
 	public void addGameObject(GameObject o){
-		gameObjects.add(o);
+		if(owner == null){
+			gameObjects.add(o);
+			if(o.getOwner() != null){
+				owner = o.getOwner();
+			}
+		}
+		else if(owner == o.getOwner() || o.getOwner() == null){
+			gameObjects.add(o);
+		}
 	}
-	
+
 	public void removeGameObject(GameObject o){
 		gameObjects.remove(o);
+		if(gameObjects.size() == 0 && o.getOwner() != null){
+			owner = null;
+		}
 	}
 
 	public void nextTile(){
@@ -53,7 +66,7 @@ public abstract class TerrainObject implements GameDrawable{
 	public boolean isBiome(){
 		return isBiome;
 	}
-	
+
 	public void setBiomeString(String string){
 		biomeString = string;
 		isBiome = true;
@@ -64,5 +77,15 @@ public abstract class TerrainObject implements GameDrawable{
 			return biomeString;
 		}
 		return "";
+	}
+
+	public void setOwner(Faction owner){
+		if(this.owner == null){
+			this.owner = owner;
+		}
+	}
+
+	public Faction getOwner(){
+		return owner;
 	}
 }
