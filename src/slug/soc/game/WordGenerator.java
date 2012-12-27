@@ -11,6 +11,9 @@ public class WordGenerator {
 
 	private File nounsFile = new File("nouns.txt");
 	private File verbsFile = new File("verbs.txt");
+	private File surnamePrefixFile = new File("surnamePrefix.txt");
+	private File surnameSuffixFile = new File("surnameSuffix.txt");
+	private File surnameWholeFile = new File("surnameWhole.txt");
 	
 	private Scanner scanner;
 	
@@ -56,6 +59,15 @@ public class WordGenerator {
 		}
 		scanner.close();
 		return word;
+	}
+	
+	public String getRandomFactionName(){
+		if(RandomProvider.getInstance().nextInt(4) == 0){
+			return getRandomWordFromFile(surnameWholeFile);
+		}
+		else{
+			return getRandomWordFromFile(surnamePrefixFile) + getRandomWordFromFile(surnameSuffixFile).toLowerCase();
+		}
 	}
 	
 	public String getRandomAdjective(){

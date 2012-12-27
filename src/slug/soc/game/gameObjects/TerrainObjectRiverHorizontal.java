@@ -7,7 +7,7 @@ import slug.soc.game.gameObjects.tiles.roadAndRiver.TileHorizontalLine;
 public class TerrainObjectRiverHorizontal extends TerrainObject {
 
 	public TerrainObjectRiverHorizontal() {
-		super(new TileHorizontalLine(Color.BLUE));
+		super(new TileHorizontalLine(Color.BLUE),true);
 	}
 
 	public String toString(){

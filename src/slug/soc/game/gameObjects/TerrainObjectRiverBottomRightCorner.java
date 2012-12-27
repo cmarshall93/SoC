@@ -7,7 +7,7 @@ import slug.soc.game.gameObjects.tiles.roadAndRiver.TileBottomRightCornerLine;
 public class TerrainObjectRiverBottomRightCorner extends TerrainObject {
 
 	public TerrainObjectRiverBottomRightCorner() {
-		super(new TileBottomRightCornerLine(Color.BLUE));
+		super(new TileBottomRightCornerLine(Color.BLUE), true);
 	}
 	
 	public String toString(){

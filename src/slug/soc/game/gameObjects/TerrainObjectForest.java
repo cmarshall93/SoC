@@ -6,7 +6,7 @@ import slug.soc.game.gameObjects.tiles.terrian.TileForest;
 public class TerrainObjectForest extends TerrainObject {
 
 	public TerrainObjectForest() {
-		super(new TileForest());
+		super(new TileForest(), true);
 	}
 
 	public String toString(){

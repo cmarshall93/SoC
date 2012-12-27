@@ -5,7 +5,7 @@ import slug.soc.game.gameObjects.tiles.terrian.TileGrassPlain;
 public class TerrainObjectGrassPlain extends TerrainObject {
 
 	public TerrainObjectGrassPlain() {
-		super(new TileGrassPlain());
+		super(new TileGrassPlain(), true);
 	}
 
 	public String toString(){

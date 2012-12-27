@@ -18,14 +18,16 @@ public abstract class TerrainObject implements GameDrawable{
 	private ArrayList<GameObject> gameObjects;
 	private boolean isBiome;
 	private String biomeString;
+	public boolean isBuildable;
 	private Faction owner;
 
-	public TerrainObject(GameTile tile){
+	public TerrainObject(GameTile tile, boolean isBuildable){
 		baseTile = tile;	
 		currentTile = baseTile;
 		tileIndex = 0;
 		isBiome = false;
 		gameObjects = new ArrayList<GameObject>();
+		this.isBuildable = isBuildable;
 		owner = null;
 	}
 
@@ -34,14 +36,16 @@ public abstract class TerrainObject implements GameDrawable{
 	}
 
 	public void addGameObject(GameObject o){
-		if(owner == null){
-			gameObjects.add(o);
-			if(o.getOwner() != null){
-				owner = o.getOwner();
+		if(isBuildable){
+			if(owner == null){
+				gameObjects.add(o);
+				if(o.getOwner() != null){
+					owner = o.getOwner();
+				}
 			}
-		}
-		else if(owner == o.getOwner() || o.getOwner() == null){
-			gameObjects.add(o);
+			else if(owner == o.getOwner() || o.getOwner() == null){
+				gameObjects.add(o);
+			}
 		}
 	}
 

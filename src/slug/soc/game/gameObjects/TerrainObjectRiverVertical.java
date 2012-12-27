@@ -7,7 +7,7 @@ import slug.soc.game.gameObjects.tiles.roadAndRiver.TileVerticalLine;
 public class TerrainObjectRiverVertical extends TerrainObject {
 
 	public TerrainObjectRiverVertical() {
-		super(new TileVerticalLine(Color.BLUE));
+		super(new TileVerticalLine(Color.BLUE), true);
 	}
 	
 	public String toString(){

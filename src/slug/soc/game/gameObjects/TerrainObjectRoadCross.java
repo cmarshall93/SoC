@@ -7,7 +7,7 @@ import slug.soc.game.gameObjects.tiles.roadAndRiver.TileCrossLine;
 public class TerrainObjectRoadCross extends TerrainObject {
 
 	public TerrainObjectRoadCross() {
-		super(new TileCrossLine(new Color(99,33,00)));
+		super(new TileCrossLine(new Color(99,33,00)), true);
 	}
 
 	public String toString(){

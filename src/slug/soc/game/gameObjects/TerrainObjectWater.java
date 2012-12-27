@@ -6,7 +6,7 @@ import slug.soc.game.gameObjects.tiles.terrian.TileWater;
 public class TerrainObjectWater extends TerrainObject {
 
 	public TerrainObjectWater() {
-		super(new TileWater());
+		super(new TileWater(), false);
 	}
 	
 	public String toString(){

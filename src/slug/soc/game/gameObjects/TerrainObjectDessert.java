@@ -5,7 +5,7 @@ import slug.soc.game.gameObjects.tiles.terrian.TileDessert;
 public class TerrainObjectDessert extends TerrainObject {
 
 	public TerrainObjectDessert(){
-		super(new TileDessert());
+		super(new TileDessert(), true);
 	}
 	
 	public String toString(){

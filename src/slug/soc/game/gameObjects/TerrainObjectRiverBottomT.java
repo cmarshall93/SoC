@@ -7,7 +7,7 @@ import slug.soc.game.gameObjects.tiles.roadAndRiver.TileBottomTLine;
 public class TerrainObjectRiverBottomT extends TerrainObject {
 
 	public TerrainObjectRiverBottomT() {
-		super(new TileBottomTLine(Color.BLUE));
+		super(new TileBottomTLine(Color.BLUE), true);
 	}
 
 	public String toString(){

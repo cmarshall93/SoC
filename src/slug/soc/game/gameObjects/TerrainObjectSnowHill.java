@@ -5,7 +5,7 @@ import slug.soc.game.gameObjects.tiles.terrian.TileSnowHill;
 public class TerrainObjectSnowHill extends TerrainObject {
 
 	public TerrainObjectSnowHill() {
-		super(new TileSnowHill());
+		super(new TileSnowHill(), true);
 	}
 	
 	public String toString(){

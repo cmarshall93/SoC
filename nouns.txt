@@ -88,4 +88,16 @@ Salamander
 Dwarf
 Witch
 Harpie
+Kitten
+Puppy
+Calf
+Foal
+Pike
+Badger
+Bear Cub
+Lioness
+Lion Cub
+Antelope
+Anteater
+Beared Cat
 

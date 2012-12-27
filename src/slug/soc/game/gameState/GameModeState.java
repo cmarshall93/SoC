@@ -26,6 +26,12 @@ public class GameModeState implements IGameState, Runnable {
 
 	private static final int UPDATE_RATE = 30;
 	private static GameModeState instance;
+	
+	private long lastFPS;
+	private int currentFPS;
+	private int frames;
+	
+	private boolean viewHoldings;
 
 	private TerrainObject[][] map;
 	private TerrianGenerator terrianGenerator;
@@ -54,6 +60,7 @@ public class GameModeState implements IGameState, Runnable {
 
 	private GameModeState(){
 		terrianGenerator = new TerrianGenerator();
+		lastFPS = System.currentTimeMillis();
 	}
 
 	public void run(){
@@ -77,7 +84,6 @@ public class GameModeState implements IGameState, Runnable {
 			for(int yd = -1; yd < 2; yd++){
 				for(int xd = -1; xd < 2; xd++){
 					map[y + yd][x + xd].setOwner(faction);
-					System.out.println(map[y + yd][x + xd].toString());
 				}
 			}
 			y++;
@@ -165,6 +171,9 @@ public class GameModeState implements IGameState, Runnable {
 		else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
 			Game.getInstance().setCurrentGameState(PauseGameState.getInstance());
 		}
+		else if(e.getKeyCode() ==  KeyEvent.VK_H){
+			viewHoldings = !viewHoldings;
+		}
 	}
 
 	public Image createImage(){
@@ -204,7 +213,12 @@ public class GameModeState implements IGameState, Runnable {
 					if(frameCounter >= UPDATE_RATE){
 						getMap()[y][x].nextTile();
 					}
-					g.setColor(getMap()[y][x].getTile().getColor());
+					if(viewHoldings && map[y][x].getOwner() != null){ //check if player wants to see owners of tiles
+						g.setColor(map[y][x].getOwner().getFactionColor().getColor());
+					}
+					else{//default viewing
+						g.setColor(getMap()[y][x].getTile().getColor());
+					}
 					g.drawString(getMap()[y][x].getTile().getSymbol().toString(), gx, gy);
 				}
 				gx += g.getFont().getSize();
@@ -234,6 +248,23 @@ public class GameModeState implements IGameState, Runnable {
 		else{
 			g.drawString("Unclaimed land", gx, gy);
 		}
+		
+		if(viewHoldings){
+			gy = 480;
+			gx = 520;
+			g.drawString("Holdings View", gx, gy);
+		}
+		
+		gy = 480;
+		gx = 980;
+		if(System.currentTimeMillis() - lastFPS > 1000){
+			currentFPS = frames;
+			frames = 0;
+			lastFPS += 1000;
+		}
+		Integer f = currentFPS;
+		g.drawString(f.toString(), gx, gy);
+		frames++;
 	}
 
 	private void drawLoading(Graphics g){
