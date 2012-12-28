@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 
 public interface IGameState {
 
-	public Image createImage();
+	public void createImage();
 	
 	public void processKey(KeyEvent e);
 	
