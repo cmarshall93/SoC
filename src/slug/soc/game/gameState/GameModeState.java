@@ -10,12 +10,14 @@ import java.awt.image.BufferedImage;
 import slug.soc.game.FontProvider;
 import slug.soc.game.Game;
 import slug.soc.game.HouseSigilGenerator;
+import slug.soc.game.RandomProvider;
 import slug.soc.game.TerrianGenerator;
 import slug.soc.game.gameObjects.Faction;
 import slug.soc.game.gameObjects.GameObject;
 import slug.soc.game.gameObjects.GameObjectArmy;
 import slug.soc.game.gameObjects.GameObjectCursor;
 import slug.soc.game.gameObjects.TerrainObject;
+import slug.soc.game.gameObjects.TerrainObjectWater;
 
 /**
  * Represents the current game.
@@ -26,11 +28,11 @@ public class GameModeState implements IGameState, Runnable {
 
 	private static final int UPDATE_RATE = 30;
 	private static GameModeState instance;
-	
+
 	private long lastFPS;
 	private int currentFPS;
 	private int frames;
-	
+
 	private boolean viewHoldings;
 
 	private TerrainObject[][] map;
@@ -79,11 +81,21 @@ public class GameModeState implements IGameState, Runnable {
 		System.out.println(faction.getSigil());
 		int x = 50;
 		int y = 50;
+		boolean testBol = false;
+		while(!testBol){
+			if(!map[y][x].isBuildable()){
+				x = RandomProvider.getInstance().nextInt(map.length);
+				y = RandomProvider.getInstance().nextInt(map.length);
+			}
+			else{
+				testBol = true;
+			}
+		}
 		for(GameObject g : faction.getHoldings()){
 			map[y][x].addGameObject(g);
-			for(int yd = -1; yd < 2; yd++){
-				for(int xd = -1; xd < 2; xd++){
-					map[y + yd][x + xd].setOwner(faction);
+			for(TerrainObject t: map[y][x].getBiome().getContents()){
+				if(t != null){
+					t.setOwner(faction);
 				}
 			}
 			y++;
@@ -243,18 +255,18 @@ public class GameModeState implements IGameState, Runnable {
 		gx -= 50;
 		gy += 20;
 		if(getMap()[currentYPos][currentXPos].getOwner() != null){
-			g.drawString("Property of " + getMap()[currentYPos][currentXPos].getOwner().toString(), gx, gy);
+			g.drawString("Property of the " + getMap()[currentYPos][currentXPos].getOwner().toString() + " family", gx, gy);
 		}
 		else{
 			g.drawString("Unclaimed land", gx, gy);
 		}
-		
+
 		if(viewHoldings){
 			gy = 480;
 			gx = 520;
 			g.drawString("Holdings View", gx, gy);
 		}
-		
+
 		gy = 480;
 		gx = 980;
 		if(System.currentTimeMillis() - lastFPS > 1000){

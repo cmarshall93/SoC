@@ -187,7 +187,7 @@ public class TerrianGenerator {
 		for(int y = 0; y < map.length; y++){
 			for(int x = 0; x < map.length; x++){
 				if(!map[y][x].isBiome() && (!(map[y][x] instanceof TerrainObjectWater)) ){
-					createBiome(x, y, map,WordGenerator.getInstance().getRandomAdjective());
+					createBiome(x, y, map,new Biome(WordGenerator.getInstance().getRandomAdjective()));
 				}
 			}
 		}
@@ -327,27 +327,28 @@ public class TerrianGenerator {
 		rivers.add(river);
 
 	}
-
-	private void createBiome(int x, int y, TerrainObject[][] map, String n){
-		map[y][x].setBiomeString(n + " ");
+	
+	private void createBiome(int x, int y, TerrainObject[][] map, Biome b){
+		map[y][x].addToBiome(b);
+		b.addTerrianObject(map[y][x]);
 		if(y + 1 < map.length -1){
 			if(!map[y + 1][x].isBiome() && map[y + 1][x].getClass() == (map[y][x]).getClass()){
-				createBiome(x, y + 1, map, n);
+				createBiome(x, y + 1, map, b );
 			}
 		}
 		if(y - 1 > 0){
 			if(!map[y - 1][x].isBiome() && (map[y - 1][x].getClass() == (map[y][x]).getClass())){
-				createBiome(x, y - 1, map, n);
+				createBiome(x, y - 1, map, b);
 			}
 		}
 		if(x + 1 < map.length -1){
 			if(!map[y][x + 1].isBiome() && map[y][x + 1].getClass() == (map[y][x]).getClass()){
-				createBiome(x + 1, y, map, n);
+				createBiome(x + 1, y, map, b);
 			}
 		}
 		if(x - 1 > 0){
 			if(!map[y][x - 1].isBiome() && map[y][x - 1].getClass() == (map[y][x]).getClass()){
-				createBiome(x - 1, y, map, n);
+				createBiome(x - 1, y, map, b);
 			}
 		}
 	}

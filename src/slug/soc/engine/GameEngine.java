@@ -42,7 +42,7 @@ public class GameEngine {
 	public void startGame(){
 		running = true;
 		renderTimer = new Timer();
-		renderTimer.schedule(new RenderTask(), 15, 15);
+		renderTimer.schedule(new RenderTask(), 7, 7);
 		while(running){
 		
 		}

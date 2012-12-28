@@ -17,7 +17,7 @@ public abstract class TerrainObject implements GameDrawable{
 	private GameTile currentTile;
 	private ArrayList<GameObject> gameObjects;
 	private boolean isBiome;
-	private String biomeString;
+	private Biome biome;
 	public boolean isBuildable;
 	private Faction owner;
 
@@ -71,14 +71,18 @@ public abstract class TerrainObject implements GameDrawable{
 		return isBiome;
 	}
 
-	public void setBiomeString(String string){
-		biomeString = string;
+	public void addToBiome(Biome biome){
+		this.biome = biome;
 		isBiome = true;
 	}
 
+	public Biome getBiome(){
+		return biome;
+	}
+	
 	public String getBiomeString(){
-		if(biomeString != null){
-			return biomeString;
+		if(isBiome){
+			return biome.toString();
 		}
 		return "";
 	}
@@ -91,5 +95,9 @@ public abstract class TerrainObject implements GameDrawable{
 
 	public Faction getOwner(){
 		return owner;
+	}
+	
+	public boolean isBuildable(){
+		return isBuildable;
 	}
 }

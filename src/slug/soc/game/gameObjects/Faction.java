@@ -20,9 +20,7 @@ public class Faction {
 		name = WordGenerator.getInstance().getRandomFactionName();
 		
 		holdings = new ArrayList<GameObject>();
-		holdings.add(new GameObjectHoldfast(factionColor.getColor(), this));
 		holdings.add(new GameObjectCastle(factionColor.getColor(), this));
-		holdings.add(new GameObjectTown(factionColor.getColor(), this));
 	}
 	
 	public ArrayList<GameObject> getHoldings(){
