@@ -6,10 +6,11 @@ import slug.soc.game.gameObjects.tiles.roadAndRiver.TileRiverSource;
 public class TerrainObjectRiverSource extends TerrainObject {
 
 	public TerrainObjectRiverSource() {
-		super(new TileRiverSource(), true);
+		super(new TileRiverSource(), false);
 	}
-
+	
 	public String toString(){
 		return "River";
 	}
+
 }

@@ -10,5 +10,15 @@ public class GameObjectCastle extends GameObject {
 	public GameObjectCastle(Color color, Faction owner) {
 		super(new TileCastle(color), owner);
 	}
+	
+	public String[] getStringDesc(){
+		String[] desc = new String[1];
+		desc[0] = "Property of " + owner.toString();
+		return desc;
+	}
+	
+	public String toString(){
+		return "Castle";
+	}
 
 }

@@ -9,4 +9,13 @@ public class GameObjectHoldfast extends GameObject {
 		super(new TileHoldfast(color), owner);
 	}
 
+	public String[] getStringDesc(){
+		String[] desc = new String[1];
+		desc[0] = "Property of " + owner.toString();
+		return desc;
+	}
+	
+	public String toString(){
+		return "Holdfast";
+	}
 }

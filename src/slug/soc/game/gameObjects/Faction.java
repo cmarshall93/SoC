@@ -21,6 +21,7 @@ public class Faction {
 		
 		holdings = new ArrayList<GameObject>();
 		holdings.add(new GameObjectCastle(factionColor.getColor(), this));
+		holdings.add(new GameObjectPerson(factionColor.getColor(), this));
 	}
 	
 	public ArrayList<GameObject> getHoldings(){

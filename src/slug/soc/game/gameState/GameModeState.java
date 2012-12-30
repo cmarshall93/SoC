@@ -14,7 +14,7 @@ import slug.soc.game.RandomProvider;
 import slug.soc.game.TerrianGenerator;
 import slug.soc.game.gameObjects.Faction;
 import slug.soc.game.gameObjects.GameObject;
-import slug.soc.game.gameObjects.GameObjectArmy;
+import slug.soc.game.gameObjects.GameObjectPerson;
 import slug.soc.game.gameObjects.GameObjectCursor;
 import slug.soc.game.gameObjects.TerrainObject;
 import slug.soc.game.gameObjects.TerrainObjectWater;
@@ -26,7 +26,8 @@ import slug.soc.game.gameObjects.TerrainObjectWater;
  */
 public class GameModeState implements IGameState, Runnable {
 
-	private static final int UPDATE_RATE = 30;
+	private static final int MAP_UPDATE_RATE = 30;
+	private static final int INFO_UPDATE_RATE = 120;
 	private static GameModeState instance;
 
 	private long lastFPS;
@@ -51,7 +52,9 @@ public class GameModeState implements IGameState, Runnable {
 	private int currentLoadingString = 0;
 
 	private int currentZoomIndex = 0;
-	private int frameCounter;
+
+	private int mapFrameCounter;
+	private int infoFrameCounter;
 
 	public static GameModeState getInstance(){
 		if(instance == null){
@@ -189,7 +192,8 @@ public class GameModeState implements IGameState, Runnable {
 	}
 
 	public Image createImage(){
-		frameCounter++;
+		mapFrameCounter++;
+		infoFrameCounter++;
 		Image gameImage = new BufferedImage(1000,500, BufferedImage.TYPE_INT_RGB);
 		Graphics g = gameImage.getGraphics();
 		if(loadedWorld){
@@ -202,8 +206,11 @@ public class GameModeState implements IGameState, Runnable {
 			drawLoading(g);
 		}
 
-		if(frameCounter >= UPDATE_RATE ){
-			frameCounter = 0;
+		if(mapFrameCounter >= MAP_UPDATE_RATE ){
+			mapFrameCounter = 0;
+		}
+		if(infoFrameCounter >= INFO_UPDATE_RATE){
+			infoFrameCounter = 0;
 		}
 
 		return gameImage;
@@ -222,7 +229,7 @@ public class GameModeState implements IGameState, Runnable {
 					g.drawString(" ", gx, gy);
 				}
 				else{
-					if(frameCounter >= UPDATE_RATE){
+					if(mapFrameCounter >= MAP_UPDATE_RATE){
 						getMap()[y][x].nextTile();
 					}
 					if(viewHoldings && map[y][x].getOwner() != null){ //check if player wants to see owners of tiles
@@ -261,6 +268,21 @@ public class GameModeState implements IGameState, Runnable {
 			g.drawString("Unclaimed land", gx, gy);
 		}
 
+		gy += 40;
+		if(infoFrameCounter >= INFO_UPDATE_RATE && getMap()[currentYPos][currentXPos].getGameObjects().size() > 0){
+			getMap()[currentYPos][currentXPos].getNextGameObject();
+			if(getMap()[currentYPos][currentXPos].getCurrentGameObject() instanceof GameObjectCursor){
+				getMap()[currentYPos][currentXPos].getNextGameObject();
+			}
+		}
+		if(getMap()[currentYPos][currentXPos].getGameObjects().size() > 0){
+			g.drawString(getMap()[currentYPos][currentXPos].getCurrentGameObject().toString(), gx, gy);
+			String [] desc = getMap()[currentYPos][currentXPos].getCurrentGameObject().getStringDesc();
+			for(int i = 0; i < desc.length; i++){
+				gy += 20;
+				g.drawString(desc[i], gx, gy);
+			}
+		}
 		if(viewHoldings){
 			gy = 480;
 			gx = 520;
@@ -291,7 +313,7 @@ public class GameModeState implements IGameState, Runnable {
 		}
 		gy = 480;
 		gx = 500;
-		if(frameCounter >= UPDATE_RATE){
+		if(mapFrameCounter >= MAP_UPDATE_RATE){
 			if(currentLoadingString + 1 < loadingString.length){
 				currentLoadingString++  ;
 			}

@@ -7,7 +7,7 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
-import slug.soc.game.gameObjects.GameObjectArmy;
+import slug.soc.game.gameObjects.GameObjectPerson;
 import slug.soc.game.gameObjects.GameObjectCursor;
 import slug.soc.game.gameObjects.TerrainObject;
 
