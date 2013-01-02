@@ -12,7 +12,7 @@ public class GameObjectTown extends GameObject {
 	
 	public String[] getStringDesc(){
 		String[] desc = new String[1];
-		desc[0] = "Property of " + owner.toString();
+		desc[0] = "Property of the " + owner.toString() + " family";
 		return desc;
 	}
 	

@@ -13,8 +13,7 @@ public class AboutState implements IGameState {
 	private static AboutState instance;
 
 	private static final String text = "Songs Of Conquest is an ascii tile based game written entirely by me (Charlie Marshall)." +
-										"\nThink of it as Medieval Total War crossed with the politics/backstabbing/drama from " +
-										"\nGame Of Thrones." ;
+										"\nThink of it as an ASCII Medieval Total War.";
 
 	public static AboutState getInstance(){
 		if(instance == null){
@@ -38,7 +37,7 @@ public class AboutState implements IGameState {
 	public Image createImage() {
 		Image gameImage = new BufferedImage(1000,500, BufferedImage.TYPE_INT_RGB);
 		Graphics g = gameImage.getGraphics();
-		int gx = 30;
+		int gx = 20;
 		int gy = 30;
 		g.setFont(FontProvider.getInstance().getFont());
 		for(String line: text.split("\n")){

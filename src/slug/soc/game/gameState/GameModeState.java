@@ -189,6 +189,12 @@ public class GameModeState implements IGameState, Runnable {
 		else if(e.getKeyCode() ==  KeyEvent.VK_H){
 			viewHoldings = !viewHoldings;
 		}
+		else if(e.getKeyCode() == KeyEvent.VK_I){
+			if(getMap()[currentYPos][currentXPos].getOwner() != null){
+				FactionInformationState.getInstance().setFactionToDispaly(getMap()[currentYPos][currentXPos].getOwner());
+				Game.getInstance().setCurrentGameState(FactionInformationState.getInstance());
+			}
+		}
 	}
 
 	public Image createImage(){
@@ -262,7 +268,11 @@ public class GameModeState implements IGameState, Runnable {
 		gx -= 50;
 		gy += 20;
 		if(getMap()[currentYPos][currentXPos].getOwner() != null){
-			g.drawString("Property of the " + getMap()[currentYPos][currentXPos].getOwner().toString() + " family", gx, gy);
+			String propString = "Property of the " + getMap()[currentYPos][currentXPos].getOwner().toString() + " family";
+			g.drawString(propString, gx, gy);
+			g.setColor(Color.RED);
+			g.drawString("(i)", gx + (propString.length() * g.getFont().getSize()), gy);
+			g.setColor(Color.WHITE);
 		}
 		else{
 			g.drawString("Unclaimed land", gx, gy);
@@ -276,7 +286,8 @@ public class GameModeState implements IGameState, Runnable {
 			}
 		}
 		if(getMap()[currentYPos][currentXPos].getGameObjects().size() > 0){
-			g.drawString(getMap()[currentYPos][currentXPos].getCurrentGameObject().toString(), gx, gy);
+			g.drawString(getMap()[currentYPos][currentXPos].getCurrentGameObject().toString() + " 1 of " 
+						+ getMap()[currentYPos][currentXPos].getGameObjects().size() +" objects on this tile", gx, gy);
 			String [] desc = getMap()[currentYPos][currentXPos].getCurrentGameObject().getStringDesc();
 			for(int i = 0; i < desc.length; i++){
 				gy += 20;
